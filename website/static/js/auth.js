@@ -1,9 +1,11 @@
-import { supabase } from './supabaseClient.js';
+import { getSupabaseClient } from './supabaseClient.js';
 import { UserConfig } from './userConfig.js';
 
 // Function to handle email/password sign in
 export async function signIn(email, password) {
     try {
+        const supabase = await getSupabaseClient();
+        if (!supabase) throw new Error('Supabase client not initialized');
         const { data, error } = await supabase.auth.signInWithPassword({
             email,
             password
@@ -21,6 +23,8 @@ export async function signIn(email, password) {
 // Function to handle email/password sign up
 export async function signUp(email, password) {
     try {
+        const supabase = await getSupabaseClient();
+        if (!supabase) throw new Error('Supabase client not initialized');
         const { data, error } = await supabase.auth.signUp({
             email,
             password
@@ -38,6 +42,12 @@ export async function signUp(email, password) {
 // Function to check if user is authenticated and configured
 export function isAuthenticated() {
     return new Promise(async (resolve) => {
+        const supabase = await getSupabaseClient();
+        if (!supabase) {
+            console.error('Supabase client not initialized for isAuthenticated check.');
+            resolve(false);
+            return;
+        }
         const session = await supabase.auth.getSession();
         if (session.data.session) {
             // Store user data in localStorage
@@ -78,6 +88,8 @@ export function getCurrentUserConfig() {
 // Function to sign out
 export async function signOut() {
     try {
+        const supabase = await getSupabaseClient();
+        if (!supabase) throw new Error('Supabase client not initialized');
         const { error } = await supabase.auth.signOut();
         if (error) throw error;
         localStorage.removeItem('user');
