@@ -345,7 +345,7 @@ async def loadDriveData():
     logger.info("Loading drive data.")
     from utils.clients import get_client
 
-    client = get_client()
+    client = await get_client() # Corrected: Added await
     try:
         try:
             msg: Message = await client.get_messages(
