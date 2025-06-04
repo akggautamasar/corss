@@ -49,13 +49,18 @@ logger = Logger(__name__)
 # The old @app.on_event("startup") handler for main_bot has been removed.
 
 
-@app.get("/")
+@app.get("/home")
 async def home_page():
     return FileResponse("website/home.html")
 
 
+@app.get("/")
+async def root_page():
+    return FileResponse("website/login.html")
+
+
 @app.get("/stream")
-async def home_page():
+async def stream_page():
     return FileResponse("website/VideoPlayer.html")
 
 
@@ -79,6 +84,13 @@ async def dl_file(request: Request):
 
 
 # Api Routes
+
+@app.get("/api/supabase-config")
+async def supabase_config():
+    return {
+        "supabase_url": config.SUPABASE_URL,
+        "supabase_anon_key": config.SUPABASE_ANON_KEY
+    }
 
 
 @app.post("/api/checkPassword")
