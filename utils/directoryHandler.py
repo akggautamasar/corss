@@ -347,30 +347,34 @@ async def loadDriveData():
 
     client = await get_client() # Corrected: Added await
     try:
-        try:
-            msg: Message = await client.get_messages(
-                config.STORAGE_CHANNEL, config.DATABASE_BACKUP_MSG_ID
-            )
-        except Exception as e:
-            logger.error(f"Error fetching backup message: {e}")
+        if config.DATABASE_BACKUP_MSG_ID and config.DATABASE_BACKUP_MSG_ID > 0:
+            logger.info(f"Attempting to fetch backup message with ID: {config.DATABASE_BACKUP_MSG_ID}")
+            try:
+                msg: Message = await client.get_messages(
+                    config.STORAGE_CHANNEL, config.DATABASE_BACKUP_MSG_ID
+                )
+                if msg and msg.document and msg.document.file_name == "drive.data":
+                    dl_path = await msg.download()
+                    with open(dl_path, "rb") as f:
+                        DRIVE_DATA = dill.load(f)
+                    logger.info("Drive data loaded from Telegram backup.")
+                elif msg and msg.document:
+                    logger.warning(f"Fetched message document '{msg.document.file_name}' is not 'drive.data'. Proceeding to create new drive data.")
+                    raise Exception("Backup file name mismatch.") # To fall into the generic except block
+                else:
+                    logger.warning("Could not find a valid document in the backup message. Proceeding to create new drive data.")
+                    raise Exception("No document in backup message.") # To fall into the generic except block
 
-            # Forcefully terminates the program immediately
-            os.kill(os.getpid(), signal.SIGKILL)
-
-        if not msg.document:
-            logger.error(f"Error fetching backup message: {e}")
-
-            # Forcefully terminates the program immediately
-            os.kill(os.getpid(), signal.SIGKILL)
-
-        if msg.document.file_name == "drive.data":
-            dl_path = await msg.download()
-            with open(dl_path, "rb") as f:
-                DRIVE_DATA = dill.load(f)
-
-            logger.info("Drive data loaded from Telegram backup.")
+            except Exception as e:
+                logger.warning(f"Failed to fetch or process backup message: {e}. Proceeding to create new drive data.")
+                # Ensure we fall through to the 'except Exception as e:' block below for new data creation
+                # by re-raising or setting a flag if necessary, or just letting it fall through if this is the only try.
+                # For simplicity here, we'll let it fall into the outer except if this specific try fails.
+                raise # Re-raise to be caught by the outer except block for new data creation
         else:
-            raise Exception("Backup drive.data file not found on Telegram.")
+            logger.info("DATABASE_BACKUP_MSG_ID not set or invalid. Proceeding to create new drive data.")
+            raise Exception("DATABASE_BACKUP_MSG_ID not set or invalid.") # To fall into the generic except block
+
     except Exception as e:
         logger.warning(f"Backup load failed: {e}")
         logger.info("Creating new drive.data file.")
