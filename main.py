@@ -12,6 +12,7 @@ from config import ADMIN_PASSWORD, MAX_FILE_SIZE, STORAGE_CHANNEL
 from utils.clients import initialize_clients
 from utils.directoryHandler import loadDriveData
 from utils.bot_mode import main_bot # Ensure main_bot is imported for lifespan
+from pyrogram import idle # Import idle
 from utils.directoryHandler import getRandomID
 from utils.extra import auto_ping_website, convert_class_to_dict, reset_cache_dir
 from utils.streamer import media_streamer
@@ -33,7 +34,7 @@ async def lifespan(app: FastAPI):
     await loadDriveData()
 
     # Start the main_bot's idle task to keep it running for commands
-    asyncio.create_task(main_bot.idle())
+    asyncio.create_task(idle())
 
     # Start the website auto ping task
     asyncio.create_task(auto_ping_website())
