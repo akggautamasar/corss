@@ -34,9 +34,9 @@ async def start_file_uploader(
 
     if file_size > 1.98 * 1024 * 1024 * 1024:
         # Use premium client for files larger than 2 GB
-        client: Client = get_client(premium_required=True)
+        client: Client = await get_client(premium_required=True)
     else:
-        client: Client = get_client()
+        client: Client = await get_client()
 
     PROGRESS_CACHE[id] = ("running", 0, 0)
 
