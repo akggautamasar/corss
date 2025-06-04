@@ -188,9 +188,8 @@ async def start_bot_mode(d, b):
     BOT_MODE = b
 
     logger.info("Starting Main Bot")
-    # main_bot.start() is already called by loadDriveData which calls this function.
-    # If it's not started before this, send_message will fail.
-    # Assuming main_bot is already started or will be started by Pyrogram's internal mechanisms if not explicitly done before this call.
+    await main_bot.start()
+    logger.info("Main Bot client started.")
 
     try:
         if config.STORAGE_CHANNEL and config.STORAGE_CHANNEL != 0:
