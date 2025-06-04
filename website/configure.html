@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Configure Storage - QuantXcloud</title>
+    <link rel="stylesheet" href="static/home.css" />
+    <link rel="stylesheet" href="static/config.css" />
+</head>
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <img src="https://www.svgrepo.com/show/303215/cloud-computing.svg" style="width: 24px; height: 24px;" />
+                <span>QuantXcloud</span>
+            </div>
+        </div>
+        <div class="main-content">
+            <div class="config-container">
+                <h2>Configure Your Storage</h2>
+                <p>Set up your personal cloud storage by providing your bot and storage channel details.</p>
+                
+                <div class="config-section">
+                    <h3>Telegram Bot Configuration</h3>
+                    <div class="form-group">
+                        <label for="botToken">Bot Token:</label>
+                        <input type="text" id="botToken" placeholder="Enter your bot token">
+                        <small>Get your bot token from @BotFather</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="storageChannel">Storage Channel ID:</label>
+                        <input type="text" id="storageChannel" placeholder="Enter your storage channel ID">
+                        <small>Get your channel ID from @username_to_id_bot</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="channelName">Channel Name:</label>
+                        <input type="text" id="channelName" placeholder="Enter your channel name">
+                        <small>This will be displayed in your storage interface</small>
+                    </div>
+                </div>
+                
+                <div class="config-section">
+                    <h3>Important Instructions</h3>
+                    <ol>
+                        <li>Make sure your bot is added as an admin to your storage channel</li>
+                        <li>Give your bot the following permissions in the channel:
+                            <ul>
+                                <li>Can post messages</li>
+                                <li>Can edit messages</li>
+                                <li>Can delete messages</li>
+                            </ul>
+                        </li>
+                        <li>Keep your bot token secure and never share it</li>
+                    </ol>
+                </div>
+                
+                <button id="saveConfig" class="config-button">Save Configuration</button>
+                <div id="statusMessage" class="status-message"></div>
+            </div>
+        </div>
+    </div>
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script src="static/js/supabaseClient.js"></script>
+    <script src="static/js/userConfig.js"></script>
+    <script src="static/js/config.js"></script>
+</body>
+</html>
