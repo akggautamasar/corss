@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 loginStatus.textContent = 'Logging in...';
                 loginStatus.className = 'status-message success';
                 setTimeout(() => {
-                    window.location.href = '/';
+                    window.location.href = '/home'; // Redirect to home page after login
                 }, 1000);
             }
         } catch (error) {
