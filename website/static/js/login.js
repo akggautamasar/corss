@@ -1,3 +1,5 @@
+import { signUp } from './auth.js';
+
 document.addEventListener('DOMContentLoaded', function() {
     // DOM Elements
     const loginTab = document.getElementById('loginTab');
